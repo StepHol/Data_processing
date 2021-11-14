@@ -10,25 +10,19 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 
-
-
-
+\
 def main() -> None:
+
     file_name = '223344.xlsx'
     email = 'stepanholub@seznam.cz'
 
     my_data = DataProcessing(file_name)
     
     DataProcessing.log_statistics(my_data)
-    DataProcessing.send_to_email(my_data, 'stepanholub@seznam.cz')
+    DataProcessing.send_to_email(my_data, email)
 
     # print(DataProcessing.table_statistics(my_data))
     # print(DataProcessing.column_statistics(my_data))
-
-    # print(DataProcessing.table_statistics(my_data))
-
-
-
 
 class DataProcessing:
     '''
@@ -100,31 +94,31 @@ class DataProcessing:
         print('Saved to CSV file.')
 
 
-    def count_records(self):
+    def count_records(self) -> int:
         return len(self.df.index)
 
 
-    def count_columns(self):
+    def count_columns(self) -> int:
         return len(self.df.columns)
 
 
-    def unique_values(self):
+    def unique_values(self) -> pd.DataFrame:
         return self.df.nunique().to_frame('Unique values')
 
 
-    def null_values(self):
+    def null_values(self) -> pd.DataFrame:
         return self.df.isna().sum().to_frame('Null values')
 
 
-    def mean(self):
+    def mean(self) -> pd.DataFrame:
         return self.df_num.mean().round(1).to_frame('Average')
 
 
-    def min(self):
+    def min(self) -> pd.DataFrame:
         return self.df_num.min().to_frame('Min')
 
 
-    def max(self):
+    def max(self) -> pd.DataFrame:
         return self.df_num.max().to_frame('Max')
 
 
@@ -152,7 +146,7 @@ class DataProcessing:
         return pd.concat(frames).fillna('-')
 
 
-    def log_statistics(self):
+    def log_statistics(self) -> None:
         '''Run table and column statistics and save result to the log file. '''
         column_statistics = self.column_statistics()
         table_statistics = self.table_statistics()
@@ -178,7 +172,7 @@ class DataProcessing:
         print('Statistics saved to log.')
 
 
-    def send_to_email(self, receiver):
+    def send_to_email(self, receiver) -> None:
         '''Sends imported excel file in the attachment to the receiver.
         Uses 'config.ini' file for server and user configuration.'''
 
@@ -232,13 +226,6 @@ class DataProcessing:
         full_msg = add_attachment(msg, self.file_name)
         send_email(login, server, full_msg)
 
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
